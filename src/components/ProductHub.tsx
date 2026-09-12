@@ -19,17 +19,23 @@ import { ProductItem, ProductCategory } from '../types';
 interface ProductHubProps {
   onOpenConsultation: () => void;
   onSelectProductItem?: (product: ProductItem) => void;
+  products?: ProductItem[];
+  onOpenAdminPanel?: () => void;
 }
 
-export const ProductHub: React.FC<ProductHubProps> = ({ onOpenConsultation }) => {
+export const ProductHub: React.FC<ProductHubProps> = ({ 
+  onOpenConsultation, 
+  products = SAMX_PRODUCTS,
+  onOpenAdminPanel
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [activeModalProduct, setActiveModalProduct] = useState<ProductItem | null>(null);
 
   const categories = ['ALL', 'Mobile Solutions', 'Business Systems', 'AI Automation', 'Developer Tools'];
 
   const filteredProducts = selectedCategory === 'ALL'
-    ? SAMX_PRODUCTS
-    : SAMX_PRODUCTS.filter(p => p.category === selectedCategory);
+    ? products
+    : products.filter(p => p.category === selectedCategory);
 
   return (
     <section 
@@ -53,22 +59,36 @@ export const ProductHub: React.FC<ProductHubProps> = ({ onOpenConsultation }) =>
             </p>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-1.5 flex-wrap bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-            {categories.map(cat => (
+          {/* Category Filter Pills & Admin Shortcut */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 flex-wrap bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                    selectedCategory === cat
+                      ? 'bg-cyan-500 text-black font-bold shadow-[0_0_15px_rgba(0,242,254,0.3)]'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {onOpenAdminPanel && (
               <button
-                key={cat}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
-                  selectedCategory === cat
-                    ? 'bg-cyan-500 text-black font-bold shadow-[0_0_15px_rgba(0,242,254,0.3)]'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
+                onClick={onOpenAdminPanel}
+                className="px-3.5 py-2 rounded-2xl bg-cyan-950/80 hover:bg-cyan-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-mono flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,242,254,0.15)] transition-colors cursor-pointer"
+                title="Open Live Product Manager"
               >
-                {cat}
+                <SlidersHorizontal className="w-3.5 h-3.5" />
+                <span>+ Add Product</span>
               </button>
-            ))}
+            )}
           </div>
         </div>
 

@@ -8,6 +8,8 @@ interface GlobalSearchModalProps {
   onClose: () => void;
   onSelectProduct: (product: ProductItem) => void;
   onSelectService: (service: ServiceItem) => void;
+  products?: ProductItem[];
+  services?: ServiceItem[];
 }
 
 export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
@@ -15,6 +17,8 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   onClose,
   onSelectProduct,
   onSelectService,
+  products = SAMX_PRODUCTS,
+  services = OFFICIAL_SERVICES,
 }) => {
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<'all' | 'products' | 'services' | 'telemetry'>('all');
@@ -49,7 +53,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   const normalizedQuery = query.toLowerCase().trim();
 
-  const filteredProducts = SAMX_PRODUCTS.filter(p => 
+  const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(normalizedQuery) ||
     p.description.toLowerCase().includes(normalizedQuery) ||
     p.category.toLowerCase().includes(normalizedQuery) ||
@@ -57,7 +61,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
     p.techStack.some(t => t.toLowerCase().includes(normalizedQuery))
   );
 
-  const filteredServices = OFFICIAL_SERVICES.filter(s =>
+  const filteredServices = services.filter(s =>
     s.name.toLowerCase().includes(normalizedQuery) ||
     s.domainName.toLowerCase().includes(normalizedQuery) ||
     s.description.toLowerCase().includes(normalizedQuery) ||

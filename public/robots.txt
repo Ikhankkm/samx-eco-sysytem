@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://samx-eco-sysytem.vercel.app/sitemap.xml

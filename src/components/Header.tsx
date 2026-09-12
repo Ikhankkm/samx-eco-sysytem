@@ -9,7 +9,8 @@ import {
   ArrowRight, 
   ShieldCheck,
   Zap,
-  PhoneCall
+  PhoneCall,
+  SlidersHorizontal
 } from 'lucide-react';
 import { SAMX_COMPANY_DATA, I18N_STRINGS } from '../data/samxData';
 import { Locale } from '../types';
@@ -19,6 +20,7 @@ interface HeaderProps {
   onLocaleChange: (locale: Locale) => void;
   onOpenSearch: () => void;
   onOpenConsultation: () => void;
+  onOpenAdminPanel?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   onLocaleChange,
   onOpenSearch,
   onOpenConsultation,
+  onOpenAdminPanel,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -172,6 +175,20 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
+            {/* Admin Portal Trigger */}
+            {onOpenAdminPanel && (
+              <button
+                type="button"
+                id="header-admin-trigger"
+                onClick={onOpenAdminPanel}
+                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 text-xs font-mono transition-all cursor-pointer"
+                title="Open SAMX Live Admin Control Hub (Manage Products & Services)"
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
+                <span>ADMIN</span>
+              </button>
+            )}
+
             {/* Primary Action Button */}
             <button
               type="button"
@@ -216,6 +233,20 @@ export const Header: React.FC<HeaderProps> = ({
             ))}
 
             <div className="pt-3 mt-1 border-t border-slate-800 flex flex-col gap-2">
+              {onOpenAdminPanel && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAdminPanel();
+                  }}
+                  className="w-full py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-cyan-300 font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-slate-750"
+                >
+                  <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
+                  <span>Admin Panel (Manage Products)</span>
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => {

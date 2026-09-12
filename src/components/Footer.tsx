@@ -18,12 +18,14 @@ interface FooterProps {
   currentLocale: Locale;
   onLocaleChange: (locale: Locale) => void;
   onOpenConsultation: () => void;
+  onOpenAdminPanel?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   currentLocale,
   onLocaleChange,
   onOpenConsultation,
+  onOpenAdminPanel,
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -131,6 +133,18 @@ export const Footer: React.FC<FooterProps> = ({
               <li>
                 <span className="text-slate-600">Sub-millisecond WebRTC</span>
               </li>
+              {onOpenAdminPanel && (
+                <li className="pt-2">
+                  <button
+                    type="button"
+                    onClick={onOpenAdminPanel}
+                    className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Terminal className="w-3 h-3 text-cyan-400" />
+                    <span>Admin Control Hub</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

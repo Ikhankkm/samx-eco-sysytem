@@ -18,9 +18,15 @@ import { ServiceDomain, ServiceItem } from '../types';
 interface ServicesMatrixProps {
   onOpenConsultation: () => void;
   onSelectServiceItem?: (service: ServiceItem) => void;
+  services?: ServiceItem[];
+  onOpenAdminPanel?: () => void;
 }
 
-export const ServicesMatrix: React.FC<ServicesMatrixProps> = ({ onOpenConsultation }) => {
+export const ServicesMatrix: React.FC<ServicesMatrixProps> = ({ 
+  onOpenConsultation,
+  services = OFFICIAL_SERVICES,
+  onOpenAdminPanel
+}) => {
   const [activeDomain, setActiveDomain] = useState<ServiceDomain>('software');
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
@@ -32,7 +38,7 @@ export const ServicesMatrix: React.FC<ServicesMatrixProps> = ({ onOpenConsultati
     { id: 'media', label: 'MEDIA & STREAMING', icon: <Tv className="w-4 h-4" />, tier: 'Tier 5 Arena Systems' },
   ];
 
-  const domainServices = OFFICIAL_SERVICES.filter(s => s.domain === activeDomain);
+  const domainServices = services.filter(s => s.domain === activeDomain);
 
   const continuumSteps = [
     { step: '01', title: 'Client Problem', desc: 'Fragmented operational friction or manual bottleneck identified' },
@@ -103,23 +109,37 @@ export const ServicesMatrix: React.FC<ServicesMatrixProps> = ({ onOpenConsultati
           </div>
         </div>
 
-        {/* Domain Selection Tabs */}
-        <div className="flex items-center justify-center gap-2 flex-wrap mb-10">
-          {domainTabs.map((tab) => (
+        {/* Domain Selection Tabs & Admin Button */}
+        <div className="flex items-center justify-between gap-3 flex-wrap mb-10">
+          <div className="flex items-center gap-2 flex-wrap">
+            {domainTabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveDomain(tab.id)}
+                className={`px-4 py-2.5 rounded-xl font-mono text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+                  activeDomain === tab.id
+                    ? 'bg-cyan-500 text-black font-bold shadow-[0_0_20px_rgba(0,242,254,0.3)]'
+                    : 'bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {onOpenAdminPanel && (
             <button
-              key={tab.id}
               type="button"
-              onClick={() => setActiveDomain(tab.id)}
-              className={`px-4 py-2.5 rounded-xl font-mono text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
-                activeDomain === tab.id
-                  ? 'bg-cyan-500 text-black font-bold shadow-[0_0_20px_rgba(0,242,254,0.3)]'
-                  : 'bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800'
-              }`}
+              onClick={onOpenAdminPanel}
+              className="px-3.5 py-2.5 rounded-xl bg-cyan-950/80 hover:bg-cyan-900/90 border border-cyan-500/40 text-cyan-300 text-xs font-mono flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,242,254,0.15)] transition-colors cursor-pointer"
+              title="Open Live Capability Manager"
             >
-              {tab.icon}
-              <span>{tab.label}</span>
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>+ Add Service</span>
             </button>
-          ))}
+          )}
         </div>
 
         {/* Domain Services List */}
