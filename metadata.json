@@ -1,0 +1,6 @@
+{
+  "name": "SAMX Digital Technology Ecosystem",
+  "description": "Digital headquarters and technology ecosystem of SAMX. Engineering custom software, AI systems, automation, and enterprise digital solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
